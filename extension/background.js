@@ -400,109 +400,109 @@ const duplicateRequest=(url,app_token,sign,time,allCookies,xbc)=>{
     })
     }
 
-chrome.webRequest.onBeforeSendHeaders.addListener(async n => {
-    if(n.requestHeaders.find(u => u.name.toLowerCase() === "x-bc")){
-        let fullpatch=new URL(n.url)
-        let query=fullpatch.search
-        console.log(query);
-        if(query.includes('expired')){
-            console.log('Just received valid request');
-            xbc = n.requestHeaders.find(u => u.name.toLowerCase() === "x-bc").value
-            app_token = n.requestHeaders.find(u => u.name.toLowerCase() === "app-token").value
-            sign=n.requestHeaders.find(u => u.name.toLowerCase() === "sign").value
-            time=n.requestHeaders.find(u => u.name.toLowerCase() === "time").value
+// chrome.webRequest.onBeforeSendHeaders.addListener(async n => {
+//     if(n.requestHeaders.find(u => u.name.toLowerCase() === "x-bc")){
+//         let fullpatch=new URL(n.url)
+//         let query=fullpatch.search
+//         console.log(query);
+//         if(query.includes('expired')){
+//             console.log('Just received valid request');
+//             xbc = n.requestHeaders.find(u => u.name.toLowerCase() === "x-bc").value
+//             app_token = n.requestHeaders.find(u => u.name.toLowerCase() === "app-token").value
+//             sign=n.requestHeaders.find(u => u.name.toLowerCase() === "sign").value
+//             time=n.requestHeaders.find(u => u.name.toLowerCase() === "time").value
 
-            others["xbc"]=xbc
-            others["userAgent"]=navigator.userAgent
+//             others["xbc"]=xbc
+//             others["userAgent"]=navigator.userAgent
 
-            if(n.initiator.includes('chrome-extension')){
+//             if(n.initiator.includes('chrome-extension')){
 
-            }
-            else{
-                if(gotCookies){
-                    duplicateRequest(n.url,app_token,sign,time,allCookies,xbc)
-                }else{
-                    chrome.cookies.getAll({domain:'onlyfans.com'},all=>{
-                        console.log('Resetting cookies');
-                        gotCookies=true
+//             }
+//             else{
+//                 if(gotCookies){
+//                     duplicateRequest(n.url,app_token,sign,time,allCookies,xbc)
+//                 }else{
+//                     chrome.cookies.getAll({domain:'onlyfans.com'},all=>{
+//                         console.log('Resetting cookies');
+//                         gotCookies=true
         
-                        all.forEach(cookie=>{
-                            allCookies[cookie.name]=cookie.value
-                        })
-                        // fetchSubs()
-                        duplicateRequest(n.url,app_token,sign,time,allCookies,xbc)
-                    })
-                }  
-            }
+//                         all.forEach(cookie=>{
+//                             allCookies[cookie.name]=cookie.value
+//                         })
+//                         // fetchSubs()
+//                         duplicateRequest(n.url,app_token,sign,time,allCookies,xbc)
+//                     })
+//                 }  
+//             }
 
            
                  
         
-        }
-    }
+//         }
+//     }
 
 
     
     
     
 
-    // execute(app_token,sign,time,allCookies.auth_id,xbc)
+//     // execute(app_token,sign,time,allCookies.auth_id,xbc)
 
-    // chrome.cookies.getAll({domain:'onlyfans.com'},all=>{
-    //     console.log('Getting chrome cookies');
-    //     all.forEach(cookie=>{
-    //         allCookies[cookie.name]=cookie.value
-    //     })
+//     // chrome.cookies.getAll({domain:'onlyfans.com'},all=>{
+//     //     console.log('Getting chrome cookies');
+//     //     all.forEach(cookie=>{
+//     //         allCookies[cookie.name]=cookie.value
+//     //     })
         
 
-        // if(!allre){
-        //     allre=true
-        //     let burl='https://onlyfans.com/api2/v2/subscriptions/subscribers?limit=10&offset=0&sort=desc&field=last_activity&type=expired'
-        //     fetch(n.url, {
-        //         method: "GET",
-        //         headers: {
-        //         "accept": "application/json, text/plain, */*",
-        //         "accept-language": "en-US,en;q=0.9",
-        //         "app-token": app_token,
-        //         "sec-ch-ua": "\"Not_A Brand\";v=\"99\", \"Google Chrome\";v=\"109\", \"Chromium\";v=\"109\"",
-        //         "sec-ch-ua-mobile": "?0",
-        //         "sec-ch-ua-platform": "\"Windows\"",
-        //         "sec-fetch-dest": "empty",
-        //         "sec-fetch-mode": "cors",
-        //         "sec-fetch-site": "same-origin",
-        //         "sign": sign,
-        //         "time": time,
-        //         "user-id": allCookies.auth_id,
-        //         "x-bc": xbc,
+//         // if(!allre){
+//         //     allre=true
+//         //     let burl='https://onlyfans.com/api2/v2/subscriptions/subscribers?limit=10&offset=0&sort=desc&field=last_activity&type=expired'
+//         //     fetch(n.url, {
+//         //         method: "GET",
+//         //         headers: {
+//         //         "accept": "application/json, text/plain, */*",
+//         //         "accept-language": "en-US,en;q=0.9",
+//         //         "app-token": app_token,
+//         //         "sec-ch-ua": "\"Not_A Brand\";v=\"99\", \"Google Chrome\";v=\"109\", \"Chromium\";v=\"109\"",
+//         //         "sec-ch-ua-mobile": "?0",
+//         //         "sec-ch-ua-platform": "\"Windows\"",
+//         //         "sec-fetch-dest": "empty",
+//         //         "sec-fetch-mode": "cors",
+//         //         "sec-fetch-site": "same-origin",
+//         //         "sign": sign,
+//         //         "time": time,
+//         //         "user-id": allCookies.auth_id,
+//         //         "x-bc": xbc,
                 
-        //   },
-        //   "referrer": "https://onlyfans.com/",
-        //   "referrerPolicy": "strict-origin-when-cross-origin",
-        //   "mode": "cors",
-        //   "credentials": "include"
-        // })
-        // .then(res=>res.json())
-        // .then(result=>{
-        //     console.log("Austine",result);
-        //     // subScribeToAll(result)
-        // })
+//         //   },
+//         //   "referrer": "https://onlyfans.com/",
+//         //   "referrerPolicy": "strict-origin-when-cross-origin",
+//         //   "mode": "cors",
+//         //   "credentials": "include"
+//         // })
+//         // .then(res=>res.json())
+//         // .then(result=>{
+//         //     console.log("Austine",result);
+//         //     // subScribeToAll(result)
+//         // })
 
-        // // let response = await chrome.tabs.sendMessage(tabId, {
-        // //     run: codee
-        // //   });
+//         // // let response = await chrome.tabs.sendMessage(tabId, {
+//         // //     run: codee
+//         // //   });
 
-        // }
+//         // }
         
-    //     let ur1='https://onlyfans.com/api2/v2/subscriptions/count/all*'
-    //     let url3='https://onlyfans.com/api2/v2/subscriptions/subscribers/recent-expired?skip_users=all'//Subs.Ids
-    //     let url4='https://onlyfans.com/api2/v2/users/*'
-    //     let ur2='https://onlyfans.com/api2/v2/subscriptions/subscribers?limit=10&offset=0&sort=desc&field=last_activity&type=expired'
-    // })
+//     //     let ur1='https://onlyfans.com/api2/v2/subscriptions/count/all*'
+//     //     let url3='https://onlyfans.com/api2/v2/subscriptions/subscribers/recent-expired?skip_users=all'//Subs.Ids
+//     //     let url4='https://onlyfans.com/api2/v2/users/*'
+//     //     let ur2='https://onlyfans.com/api2/v2/subscriptions/subscribers?limit=10&offset=0&sort=desc&field=last_activity&type=expired'
+//     // })
 
-}, {
-    urls: ['https://onlyfans.com/api2/v2/subscriptions/subscribers*']
-}, ["requestHeaders"]
-);
+// }, {
+//     urls: ['https://onlyfans.com/api2/v2/subscriptions/subscribers*']
+// }, ["requestHeaders"]
+// );
 
 
 const execute=(app_token,sign,time,auth_id,xbc)=>{

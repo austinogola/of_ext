@@ -66,14 +66,17 @@ const createIFrame=()=>{
   frame.style.width = "1000px";
   frame.style.height = "500px";
   frame.style.position="absolute"
-  frame.style.zIndex=-10
+  frame.style.zIndex=-50
   document.body.appendChild(frame);
 
-  // let activeBtn=iFF.contentWindow.document.querySelector('a[href="/my/subscribers/active"]')
+
+  // let activeBtn=iFF.contentWindow.document.querySelector('a[href="/my/subscribers/expired"]')
   // activeBtn.click()
   console.log(frame);
 
 }
+
+createIFrame()
 
 
 
@@ -203,14 +206,85 @@ const addToNav=(nav,title)=>{
   return div
 }
 
-const startScan=()=>{
-  const iFF=document.querySelector('#autos_frame') 
+const startScan=async()=>{
+  await sleep(1500)
+  console.log('Starting scan');
+  const frame=document.querySelector('#autos_frame') 
+  const usersBtn=frame.contentWindow.document.querySelectorAll('.b-btn-text')
+  const allExpired=[]
+  const not_following=[]
 
-  if(iFF){
-    refreshFrame()
-  }else{
-    createIFrame()
-  }
+  usersBtn.forEach(btn=>{
+    if(btn.innerText.toUpperCase()=='Subscribe'.toUpperCase()|| btn.innerText.toUpperCase()=='Subscribe '.toUpperCase() || btn.innerText.toUpperCase()=='Subscribed'.toUpperCase()){
+      allExpired.push(btn)
+      if(btn.innerText.toUpperCase()=='Subscribe'.toUpperCase()|| btn.innerText.toUpperCase()=='Subscribe '.toUpperCase()){
+        not_following.push(btn)
+      }
+    }
+  })
+
+  console.log('all',allExpired.length,allExpired);
+  console.log('not following',not_following.length,not_following)
+
+  updateValues(allExpired,not_following)
+
+  
+}
+
+const updateValues=(all,notF)=>{
+  const inf=document.querySelector('#inf')
+  const inf2=document.querySelector('#inf2')
+
+  inf.innerText=`Total Expired: ${all.length}`
+  inf2.innerText=`Not following: ${notF.length}`
+
+  updateBtns(notF)
+}
+
+const updateBtns=(notFollowing)=>{
+  const scanBtn=document.querySelector('#scanBtn')
+  const followBtn=document.querySelector('#followBtn')
+
+  scanBtn.disabled=false
+  scanBtn.style.backgroundColor='#6FB4EA'
+  scanBtn.innerHTML='SCAN ALL EXPIRED'
+  scanBtn.style.cursor='pointer'
+
+  followBtn.disabled=false
+  followBtn.style.backgroundColor='#16C60C'
+  followBtn.innerHTML= `AUTO FOLLOW ALL (${notFollowing.length})`
+  followBtn.style.cursor='pointer'
+
+}
+
+const followAll=()=>{
+  let frame=document.querySelector('#autos_frame')
+  const usersBtn=frame.contentWindow.document.querySelectorAll('.b-btn-text')
+  let relevantBtns=[]
+
+
+  usersBtn.forEach(btn=>{
+    console.log(btn.innerText);
+    if(btn.innerText.toUpperCase()=='Subscribe'.toUpperCase()|| btn.innerText.toUpperCase()=='Subscribe '.toUpperCase()){
+      relevantBtns.push(btn)
+    }
+  })
+
+  relevantBtns.forEach(async btn=>{
+    btn.click()
+    await sleep(500)
+  })
+
+  updateFollowBtn()
+}
+
+const updateFollowBtn=()=>{
+  let followBtn=document.querySelector('#followBtn')
+  followBtn.style.backgroundColor='#6FB4EA'
+  followBtn.innerHTML='AUTO FOLLOW ALL (0)'
+
+  let inf2=document.querySelector('#inf2')
+  inf2.innerText='Not Following: 0'
 }
 
 const createBod=(mainDiv)=>{
@@ -288,7 +362,8 @@ const createBod=(mainDiv)=>{
 
   followBtn.addEventListener('click',e=>{
     e.preventDefault()
-    startFollowing()
+    // startFollowing()
+    followAll()
   })
 
   btnBox.appendChild(scanBtn)
